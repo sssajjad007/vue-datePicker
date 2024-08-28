@@ -1,26 +1,35 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <input type="date" :max="maxDate" v-model="selectedDate" @change="updateFormattedDate" />
+    <p>Selected Date: {{ formattedDate }}</p>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import dayjs from 'dayjs';
+import jalaliday from 'jalali-plugin-dayjs';
+
+dayjs.extend(jalaliday);
+dayjs.extend(jalaliday).calendar('jalali');
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  data() {
+    return {
+      selectedDate: '',
+      maxDate: dayjs().format('YYYY-MM-DD'),
+      formattedDate: '',
+    };
+  },
+  methods: {
+    updateFormattedDate() {
+      this.formattedDate = this.selectedDate
+        ? dayjs(this.selectedDate,{ jalali: true }).format('YYYY-MM-DD')
+        : '';
+    },
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+/* Add any custom styles here */
 </style>
